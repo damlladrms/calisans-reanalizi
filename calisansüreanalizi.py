@@ -61,16 +61,44 @@ def extract_times_from_video(video_path):
     cap.release()
     return times
 
+def main_menu():
+    while True:
+        print("\n*** Çalışan Süre Analizi ***")
+        print("1. Video Süresi Analizi Yap")
+        print("2. Manuel Süre Girişi Yap")
+        print("3. Çıkış")
+
+        choice = input("Seçiminizi yapın: ")
+
+        if choice == '1':
+            video_path = input("Video dosyasının yolunu girin: ")
+            employee_times = extract_times_from_video(video_path)
+            if employee_times:
+                results = analyze_employee_times(employee_times)
+                print("Ortalama Süre: {:.2f}".format(results["Ortalama Süre"]))
+                print("Standart Sapma: {:.2f}".format(results["Standart Sapma"]))
+                print("Düzenlenmiş Süreler (%10 kayıp):", results["Düzenlenmiş Süreler (%10 kayıp)"])
+            else:
+                print("Hiçbir süre bilgisi alınamadı.")
+
+        elif choice == '2':
+            try:
+                manual_times = input("Süreleri virgülle ayırarak girin (ör. 120, 130, 140): ")
+                times = list(map(float, manual_times.split(',')))
+                results = analyze_employee_times(times)
+                print("Ortalama Süre: {:.2f}".format(results["Ortalama Süre"]))
+                print("Standart Sapma: {:.2f}".format(results["Standart Sapma"]))
+                print("Düzenlenmiş Süreler (%10 kayıp):", results["Düzenlenmiş Süreler (%10 kayıp)"])
+            except ValueError:
+                print("Lütfen geçerli bir giriş yapın!")
+
+        elif choice == '3':
+            print("Çıkış yapılıyor...")
+            break
+
+        else:
+            print("Geçersiz seçim, lütfen tekrar deneyin.")
+
 # Örnek kullanım
 if __name__ == "__main__":
-    video_path = input("Video dosyasının yolunu girin: ")
-    employee_times = extract_times_from_video(video_path)
-    
-    if employee_times:
-        results = analyze_employee_times(employee_times)
-
-        print("Ortalama Süre: {:.2f}".format(results["Ortalama Süre"]))
-        print("Standart Sapma: {:.2f}".format(results["Standart Sapma"]))
-        print("Düzenlenmiş Süreler (%10 kayıp):", results["Düzenlenmiş Süreler (%10 kayıp)"])
-    else:
-        print("Hiçbir süre bilgisi alınamadı.")
+    main_menu()
